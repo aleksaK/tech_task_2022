@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.util.Map.Entry;
+
 @Service
 public class PremiumCalculator {
 
@@ -36,7 +38,7 @@ public class PremiumCalculator {
                         Map.Entry::getValue, Double::sum));
     }
 
-    private double calculateSingleRiskTypePremium(Map.Entry<RiskType, Double> entry) {
+    private double calculateSingleRiskTypePremium(Entry<RiskType, Double> entry) {
         return fees.getFees().entrySet().stream()
                 .filter(feesEntry -> feesEntry.getKey().test(entry))
                 .map(feesEntry -> feesEntry.getValue() * entry.getValue())

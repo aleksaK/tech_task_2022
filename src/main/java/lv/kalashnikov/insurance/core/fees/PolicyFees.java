@@ -5,21 +5,23 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static java.util.Map.*;
+
 @Component
 public class PolicyFees {
 
-    private final Map<Predicate<Map.Entry<RiskType, Double>>, Double> fees = Map.ofEntries(
-            Map.entry(entry -> entry.getKey().equals(RiskType.FIRE) && entry.getValue() > 100,
+    private final Map<Predicate<Entry<RiskType, Double>>, Double> fees = ofEntries(
+            entry(entry -> entry.getKey().equals(RiskType.FIRE) && entry.getValue() > 100,
                     0.024),
-            Map.entry(entry -> entry.getKey().equals(RiskType.FIRE) && entry.getValue() <= 100,
+            entry(entry -> entry.getKey().equals(RiskType.FIRE) && entry.getValue() <= 100,
                     0.014),
-            Map.entry(entry -> entry.getKey().equals(RiskType.THEFT) && entry.getValue() >= 15,
+            entry(entry -> entry.getKey().equals(RiskType.THEFT) && entry.getValue() >= 15,
                     0.05),
-            Map.entry(entry -> entry.getKey().equals(RiskType.THEFT) && entry.getValue() < 15,
+            entry(entry -> entry.getKey().equals(RiskType.THEFT) && entry.getValue() < 15,
                     0.11)
     );
 
-    public Map<Predicate<Map.Entry<RiskType, Double>>, Double> getFees() {
+    public Map<Predicate<Entry<RiskType, Double>>, Double> getFees() {
         return fees;
     }
 
