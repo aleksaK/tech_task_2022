@@ -24,7 +24,7 @@ public class PremiumCalculatorTest {
     @Autowired private PremiumCalculator calculator;
 
     @Test
-    public void start() {
+    public void contextMustNotBeNull() {
         assertNotNull(context);
     }
 

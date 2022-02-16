@@ -7,9 +7,11 @@ import lv.kalashnikov.insurance.core.fees.PolicyFees;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.util.Map.Entry;
+import static java.util.stream.Collectors.toMap;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.summingDouble;
 
 @Service
 public class PremiumCalculator {
@@ -24,7 +26,7 @@ public class PremiumCalculator {
     public double calculate(Policy policy) {
         Map<RiskType, Double> totalAmountByType = getTotalAmountByType(policy);
         double finalPremium = totalAmountByType.entrySet().stream()
-                .map(this::calculateSingleRiskTypePremium)
+                .map(this::getSingleRiskTypePremium)
                 .reduce(.0, Double::sum);
         return Math.round(finalPremium * 100.) / 100.;
     }
@@ -32,13 +34,12 @@ public class PremiumCalculator {
     private Map<RiskType, Double> getTotalAmountByType(Policy policy) {
         return policy.getEntities().stream()
                 .map(entity -> entity.getItems().stream()
-                        .collect(Collectors.groupingBy(Item::getType, Collectors.summingDouble(Item::getInsuranceAmount))))
+                        .collect(groupingBy(Item::getType, summingDouble(Item::getInsuranceAmount))))
                 .flatMap(map -> map.entrySet().stream())
-                .collect(Collectors.toMap(Map.Entry::getKey,
-                        Map.Entry::getValue, Double::sum));
+                .collect(toMap(Entry::getKey, Entry::getValue, Double::sum));
     }
 
-    private double calculateSingleRiskTypePremium(Entry<RiskType, Double> entry) {
+    private double getSingleRiskTypePremium(Entry<RiskType, Double> entry) {
         return fees.getFees().entrySet().stream()
                 .filter(feesEntry -> feesEntry.getKey().test(entry))
                 .map(feesEntry -> feesEntry.getValue() * entry.getValue())
