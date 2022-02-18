@@ -1,41 +1,25 @@
 package lv.kalashnikov.insurance.core.domain;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
+@Data
+@RequiredArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 public class Item {
 
-    private String name;
-    private double insuranceAmount;
-    private RiskType type;
+    @NotBlank(message = "Name is required")
+    final private String name;
 
-    public Item() {}
+    @Min(value = 1, message = "Minimum item insurable amount is 1.00")
+    final private double insuranceAmount;
 
-    public Item(String name, double insuranceAmount, RiskType type) {
-        this.name = name;
-        this.insuranceAmount = insuranceAmount;
-        this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getInsuranceAmount() {
-        return insuranceAmount;
-    }
-
-    public void setInsuranceAmount(double insuranceAmount) {
-        this.insuranceAmount = insuranceAmount;
-    }
-
-    public RiskType getType() {
-        return type;
-    }
-
-    public void setType(RiskType type) {
-        this.type = type;
-    }
+    @NotNull
+    final private RiskType type;
 
 }

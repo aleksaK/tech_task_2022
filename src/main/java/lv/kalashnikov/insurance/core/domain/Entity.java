@@ -1,33 +1,23 @@
 package lv.kalashnikov.insurance.core.domain;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
+@Data
+@RequiredArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 public class Entity {
 
-    private String name;
-    private List<Item> items;
+    @NotBlank(message = "Name is required")
+    final private String name;
 
-    public Entity() {}
-
-    public Entity(String name, List<Item> items) {
-        this.name = name;
-        this.items = items;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(List<Item> items) {
-        this.items = items;
-    }
+    @Size(min = 1, message = "At least one item is required")
+    final private List<@Valid Item> items;
 
 }

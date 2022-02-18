@@ -1,5 +1,6 @@
 package lv.kalashnikov.insurance.core.fees;
 
+import lombok.Data;
 import lv.kalashnikov.insurance.core.domain.RiskType;
 import org.springframework.stereotype.Component;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.function.Predicate;
 import static java.util.Map.*;
 
 @Component
+@Data
 public class PolicyFees {
 
     private final Map<Predicate<Entry<RiskType, Double>>, Double> fees = ofEntries(
@@ -20,9 +22,5 @@ public class PolicyFees {
             entry(entry -> entry.getKey().equals(RiskType.THEFT) && entry.getValue() < 15,
                     0.11)
     );
-
-    public Map<Predicate<Entry<RiskType, Double>>, Double> getFees() {
-        return fees;
-    }
 
 }

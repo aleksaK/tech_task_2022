@@ -1,43 +1,25 @@
 package lv.kalashnikov.insurance.core.domain;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 
+@Data
+@RequiredArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 public class Policy {
 
-    private String policyNumber;
-    private boolean isApproved;
-    private List<Entity> entities;
+    @NotBlank(message = "Policy number is required")
+    final private String policyNumber;
 
-    public Policy() {}
+    final private boolean isApproved;
 
-    public Policy(String policyNumber, boolean isApproved, List<Entity> entities) {
-        this.policyNumber = policyNumber;
-        this.isApproved = isApproved;
-        this.entities = entities;
-    }
-
-    public String getPolicyNumber() {
-        return policyNumber;
-    }
-
-    public void setPolicyNumber(String policyNumber) {
-        this.policyNumber = policyNumber;
-    }
-
-    public boolean isApproved() {
-        return isApproved;
-    }
-
-    public void setApproved(boolean approved) {
-        isApproved = approved;
-    }
-
-    public List<Entity> getEntities() {
-        return entities;
-    }
-
-    public void setEntities(List<Entity> entities) {
-        this.entities = entities;
-    }
+    @Size(min = 1, message = "At least one entity is required")
+    final private List<@Valid Entity> entities;
 
 }
