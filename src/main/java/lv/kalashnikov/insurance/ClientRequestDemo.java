@@ -13,15 +13,26 @@ public class ClientRequestDemo {
     public static void main(String[] args) {
 
         RestTemplate restTemplate = new RestTemplate();
+        List<Policy> policies = List.of(getPolicy1(), getPolicy2(), getPolicy3());
+        String url = "https://insurance-calculator.9kcl8bj71rd4k.eu-central-1.cs.amazonlightsail.com:443/calculator/";
 
-        String url = "http://localhost:8080/calculator/";
-        Double premium1 = restTemplate.postForObject(url, getPolicy1(), Double.class);
-        Double premium2 = restTemplate.postForObject(url, getPolicy2(), Double.class);
-        Double premium3 = restTemplate.postForObject(url, getPolicy3(), Double.class);
-        System.out.println("POLICY 1 PREMIUM IS: " + premium1);
-        System.out.println("POLICY 2 PREMIUM IS: " + premium2);
-        System.out.println("POLICY 3 PREMIUM IS: " + premium3);
+        policies.stream()
+                .parallel()
+                .map(policy -> sendRequest(restTemplate, url, policy))
+                .forEach(System.out::println);
 
+//        Double premium1 = restTemplate.postForObject(url, getPolicy1(), Double.class);
+//        Double premium2 = restTemplate.postForObject(url, getPolicy2(), Double.class);
+//        Double premium3 = restTemplate.postForObject(url, getPolicy3(), Double.class);
+//        System.out.println("=====================================================================================================");
+//        System.out.println("POLICY 1 PREMIUM IS: " + premium1);
+//        System.out.println("POLICY 2 PREMIUM IS: " + premium2);
+//        System.out.println("POLICY 3 PREMIUM IS: " + premium3);
+
+    }
+
+    private static Double sendRequest(RestTemplate restTemplate, String url, Policy policy) {
+        return restTemplate.postForObject(url, policy, Double.class);
     }
 
     private static Policy getPolicy1() {
